@@ -34,6 +34,14 @@ urlpatterns = [
     path('color_bg/', views.color_bg, name='color-bg'),
     path('color_text/', views.color_text, name='color_text'),
     path('color_text_bg/', views.color_text_bg, name='color_text_bg'),
+    path('space1/', views.space1, name='space1'),
+    path('space2/', views.space2, name='space2'),
+    path('space3/', views.space3, name='space3'),
+    path('alig1/', views.alignment1, name='alignment1'),
+    path('align2/', views.align2, name='alignment2'),
+    path('b1/',views.border1, name='border1'),
+    path('b2/',views.border2, name='border2'),
+    path('b3/',views.border_color, name='border_color'),
 ]
 
 urlpatterns += [

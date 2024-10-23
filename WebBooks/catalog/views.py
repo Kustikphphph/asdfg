@@ -107,3 +107,19 @@ def color_text(request):
     return render(request,'color_text.html')
 def color_text_bg(request):
     return render(request, 'color_text_bg.html')
+def space1(request):
+    return render(request, 'space1.html')
+def space2(request):
+    return render(request, 'space2.html')
+def space3(request):
+    return render(request,'space3.html')
+def alignment1(request):
+    return render(request, 'alignment1.html')
+def align2(request):
+    return render(request, 'alignment2.html')
+def border1(request):
+    return render(request,'border1.html')
+def border2(request):
+    return render(request,'border2.html')
+def border_color(request):
+    return render(request,'border_color.html')
