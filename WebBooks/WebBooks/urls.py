@@ -30,6 +30,10 @@ urlpatterns = [
     path('edit1/<int:id>/', views.edit1, name='edit1'), 
     path('create/', views.create, name='create'), 
     path('delete/<int:id>/', views.delete, name='delete'),
+    path('start1/', views.start1, name='start1'),
+    path('color_bg/', views.color_bg, name='color-bg'),
+    path('color_text/', views.color_text, name='color_text'),
+    path('color_text_bg/', views.color_text_bg, name='color_text_bg'),
 ]
 
 urlpatterns += [
