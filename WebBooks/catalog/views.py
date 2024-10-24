@@ -123,3 +123,15 @@ def border2(request):
     return render(request,'border2.html')
 def border_color(request):
     return render(request,'border_color.html')
+def border_radius(request):
+    return render(request,'border_radius.html')
+def border_radius1(request):
+    return render(request,'border_radius1.html')
+def start(request):
+    return render(request, "start.html")
+def start_1(request):
+    return render(request, "start_1.html")
+def table(request):
+    return render(request,'table.html')
+def table1(request):
+    return render(request,'table1.html')

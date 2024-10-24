@@ -42,6 +42,12 @@ urlpatterns = [
     path('b1/',views.border1, name='border1'),
     path('b2/',views.border2, name='border2'),
     path('b3/',views.border_color, name='border_color'),
+    path('br/',views.border_radius, name='border_radius'),
+    path('br1/',views.border_radius1, name='border_radius1'),
+    path('start/', views.start, name='start'),
+    path('start_1/', views.start_1, name='start_1'),
+    path('table/', views.table, name='table'),
+    path('table1/', views.table1, name='table1'),
 ]
 
 urlpatterns += [
