@@ -54,6 +54,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
 
 from django.contrib import admin
 from django.utils.html import format_html
+
 from.models import Author, Book, Genre, Language, Publisher, Status, BookInstance
 # Определяем класс AuthorAdmin для авторов книг
 class AuthorAdmin(admin.ModelAdmin):
@@ -62,7 +63,7 @@ class AuthorAdmin(admin.ModelAdmin):
     readonly_fields = ["show_photo"]
     
     def show_photo(self, obj):
-        return format_html(f'<img scr="{obj.photo.url}" style="max-height: 100px;">')
+        return format_html(f'<img src="{obj.photo.url}" style="max-height: 100px;">')
     show_photo.short_description = 'Фото'
 # admin.site.register(Author)
 # Регистрируем класс AuthorAdmin для авторов книг
@@ -80,7 +81,7 @@ class BookAdmin(admin.ModelAdmin):
     inlines = [BooksInstanceInline]
     readonly_fields = ["show_photo"]
     def show_photo(self, obj):
-        return format_html(f'<img scr="{obj.photo.url}" style="max-height: 100px;">')
+        return format_html(f'<img src="{obj.photo.url}" style="max-height: 100px;">')
     show_photo.short_description = 'Обложка'
 # admin.site.register(BookInstance)
 # Регистрируем класс BookInstanceAdmin для экземпляров книг
