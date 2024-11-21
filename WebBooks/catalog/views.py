@@ -10,6 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy 
 from django.views.generic import ListView, DetailView
 from django import forms
+from django.urls import reverse
 
 # Create your views here.
 
@@ -154,19 +155,22 @@ def edit1(request, id):
     else: 
         return render(request, "edit1.html", {"author": author})
 
+# Класс для создания в БД новой записи о книге 
 class BookCreate(CreateView): 
     model = Book 
     fields = '__all__' 
-    success_url = reverse_lazy('books')
-
+    success_url = reverse_lazy('edit_books') 
+    
+# Класс для обновления в БД записи о книге 
 class BookUpdate(UpdateView): 
     model = Book 
     fields = '__all__' 
-    success_url = reverse_lazy('books')
+    success_url = reverse_lazy('edit_books') 
 
+# Класс для удаления из БД записи о книге 
 class BookDelete(DeleteView): 
     model = Book 
-    success_url = reverse_lazy('books')
+    success_url = reverse_lazy('edit_books')
 
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView): 
@@ -245,6 +249,14 @@ def delete(request, id):
         return HttpResponseRedirect("/edit_authors/") 
     except: 
         return HttpResponseNotFound("<h2>Автор не найден</h2>")
+
+
+# вызов страницы для редактирования книг 
+def edit_books(request): 
+    book = Book.objects.all() 
+    context = {'book': book} 
+    return render(request, "catalog/edit_books.html", context)
+
 
 
 
