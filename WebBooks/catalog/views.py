@@ -4,11 +4,12 @@ from .models import Book, Author, BookInstance, Genre
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog import views
-from .forms import AuthorsForm
+from .forms import AuthorsForm, Form_add_author 
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView 
 from django.urls import reverse_lazy 
 from django.views.generic import ListView, DetailView
+from django import forms
 
 # Create your views here.
 
@@ -117,11 +118,11 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='2').order_by('due_back')
     
-def authors_add(request):
-    author = Author.objects.all()
-    authorsform = AuthorsForm()
-    return render(request, "catalog/authors_add.html",
-    {"form": authorsform, "author": author})
+# def authors_add(request):
+#     author = Author.objects.all()
+#     authorsform = AuthorsForm()
+#     return render(request, "catalog/authors_add.html",
+#     {"form": authorsform, "author": author})
 
 def create(request):
     if request.method == "POST": 
@@ -133,13 +134,13 @@ def create(request):
         author.save() 
         return HttpResponseRedirect("/authors_add/")
 
-def delete(request, id): 
-    try: 
-        author = Author.objects.get(id=id) 
-        author.delete() 
-        return HttpResponseRedirect("/authors_add/") 
-    except Author.DoesNotExist: 
-        return HttpResponseNotFound("<h2>Автор не найден</h2>")
+# def delete(request, id): 
+#     try: 
+#         author = Author.objects.get(id=id) 
+#         author.delete() 
+#         return HttpResponseRedirect("/authors_add/") 
+#     except Author.DoesNotExist: 
+#         return HttpResponseNotFound("<h2>Автор не найден</h2>")
 
 def edit1(request, id): 
     author = Author.objects.get(id=id) 
@@ -166,6 +167,88 @@ class BookUpdate(UpdateView):
 class BookDelete(DeleteView): 
     model = Book 
     success_url = reverse_lazy('books')
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView): 
+    # Универсальный класс представления списка книг, 
+    # находящихся в заказе у текущего пользователя 
+    model = BookInstance 
+    template_name = 'catalog/bookinstance_list_borroved_user.html' 
+    paginate_by = 10 
+    def get_queryset(self): 
+        return BookInstance.objects.filter( 
+            borrower=self.request.user).filter( 
+            status__exact='2').order_by('due_back')
+
+class Form_edit_author(forms.ModelForm): 
+    class Meta: 
+        model = Author 
+        fields = '__all__'
+
+
+def edit_author(request, id): 
+    author = Author.objects.get(id=id) 
+    # author = get_object_or_404(Author, pk=id) 
+    if request.method == "POST": 
+        instance = Author.objects.get(pk=id) 
+        form = Form_edit_author(request.POST, request.FILES, instance=instance) 
+        if form.is_valid(): 
+            form.save() 
+        return HttpResponseRedirect("/edit_authors/") 
+    else: 
+        form = Form_edit_author(instance=author) 
+        content = {"form": form} 
+        return render(request, "catalog/edit_author.html", content) 
+
+
+
+# вызов страницы для редактирования авторов 
+def edit_authors(request): 
+    author = Author.objects.all() 
+    context = {'author': author} 
+    return render(request, "catalog/edit_authors.html", context)
+
+
+# Создание нового автора в БД 
+def authors_add(request): 
+    if request.method == 'POST': 
+        form = Form_add_author(request.POST, request.FILES) 
+        if form.is_valid(): 
+            # получить данные из формы 
+            first_name = form.cleaned_data.get("first_name") 
+            last_name = form.cleaned_data.get("last_name") 
+            date_of_birth = form.cleaned_data.get("date_of_birth") 
+            about = form.cleaned_data.get("about") 
+            photo = form.cleaned_data.get("photo") 
+            # создать объект для записи в БД 
+            obj = Author.objects.create( 
+            first_name=first_name, 
+            last_name=last_name, 
+            date_of_birth=date_of_birth, 
+            about=about, 
+            photo=photo) 
+            # сохранить полученные данные 
+            obj.save() 
+            # загрузить страницу со списком автором 
+            return HttpResponseRedirect(reverse('authors-list')) 
+    else: 
+        form = Form_add_author()  
+        context = {"form": form} 
+        return render(request, "catalog/authors_add.html", context)
+
+
+# удаление авторов из БД 
+def delete(request, id): 
+    try: 
+        author = Author.objects.get(id=id) 
+        author.delete() 
+        return HttpResponseRedirect("/edit_authors/") 
+    except: 
+        return HttpResponseNotFound("<h2>Автор не найден</h2>")
+
+
+
+
 # def start1(request):
 #     return render(request, "start1.html")
 # def color_bg(request):

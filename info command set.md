@@ -14,6 +14,8 @@ python3 -m venv venv
 python -m venv venv
 
 python -m venv .venv
+
+py -3 -m venv .venv
 ```
 
 Activating venv python [mac].
